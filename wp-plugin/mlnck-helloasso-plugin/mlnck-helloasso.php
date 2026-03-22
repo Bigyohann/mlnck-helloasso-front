@@ -10,6 +10,15 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+require_once plugin_dir_path(__FILE__) . 'vendor/plugin-update-checker-5.6/plugin-update-checker.php';
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
+
+$myUpdateChecker = PucFactory::buildUpdateChecker(
+    'https://github.com/bigyohann/mlnck_front_helloasso/',
+    __FILE__,
+    'mlnck-helloasso-plugin'
+);
+
 define('MLNCK_HELLOASSO_VERSION', '1.0.0');
 
 class MLNCK_HelloAsso_Loader {
