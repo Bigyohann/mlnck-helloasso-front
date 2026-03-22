@@ -4,6 +4,7 @@
  * Description: Loads the compiled React frontend for MLNCK HelloAsso.
  * Version: 1.0.0
  * Author: bigyohann
+ * Requires PHP: 8.1
  */
 
 if (!defined('ABSPATH')) {
@@ -17,10 +18,11 @@ if (file_exists(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
-    'https://github.com/bigyohann/mlnck_front_helloasso/',
+    'https://github.com/bigyohann/mlnck_front_helloasso',
     __FILE__,
     'mlnck-helloasso-plugin'
 );
+$myUpdateChecker->setBranch('main');
 
 define('MLNCK_HELLOASSO_VERSION', '1.0.0');
 
