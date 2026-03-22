@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
     "preview": "vite preview",
     "build:wp": "npm run build && rm -rf wp-plugin/mlnck-helloasso-plugin/dist && cp -r dist wp-plugin/mlnck-helloasso-plugin/dist && (cd wp-plugin && rm -f mlnck-helloasso-plugin*.zip && zip -r mlnck-helloasso-plugin-${PLUGIN_VERSION:-$npm_package_version}.zip mlnck-helloasso-plugin)"
   },
@@ -21,9 +23,12 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.1",
     "eslint": "^9.39.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "prettier": "^3.8.1",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "npm:rolldown-vite@7.2.5"

@@ -1,41 +1,41 @@
-import { useEffect, useState } from "react";
-import styles from "./App.module.css";
+import { useEffect, useState } from 'react'
+import styles from './App.module.css'
 
 interface HelloassoForm {
   banner: {
-    fileName: string;
-    publicUrl: string;
-  };
-  currency: string;
-  description: string;
-  startDate: string;
-  endDate: string;
+    fileName: string
+    publicUrl: string
+  }
+  currency: string
+  description: string
+  startDate: string
+  endDate: string
   meta: {
-    createdAt: string;
-    updatedAt: string;
-  };
-  title: string;
-  formSlug: string;
-  url: string;
+    createdAt: string
+    updatedAt: string
+  }
+  title: string
+  formSlug: string
+  url: string
 }
 
 function App() {
-  const [forms, setForms] = useState<HelloassoForm[]>([]);
+  const [forms, setForms] = useState<HelloassoForm[]>([])
 
   useEffect(() => {
     const fetchDatas = async () => {
       try {
-        const apiUrl = import.meta.env.VITE_API_URL;
-        const response = await fetch(`${apiUrl}/forms`);
-        const data = await response.json();
-        setForms(data);
+        const apiUrl = import.meta.env.VITE_API_URL
+        const response = await fetch(`${apiUrl}/forms`)
+        const data = await response.json()
+        setForms(data)
       } catch (error) {
-        console.error("Error fetching forms:", error);
+        console.error('Error fetching forms:', error)
       }
-    };
+    }
 
-    fetchDatas();
-  }, []);
+    fetchDatas()
+  }, [])
 
   return (
     <>
@@ -45,7 +45,7 @@ function App() {
             {form.banner?.publicUrl && (
               <img
                 src={`${import.meta.env.VITE_API_URL}/proxy-image?url=${encodeURIComponent(
-                  form.banner.publicUrl
+                  form.banner.publicUrl,
                 )}`}
                 alt={form.title}
                 className={styles.formBanner}
@@ -56,12 +56,7 @@ function App() {
               <p>{form.description}</p>
               <div className={styles.formFooter}>
                 <span>{new Date(form.startDate).toLocaleDateString()}</span>
-                <a
-                  href={form.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={styles.ctaButton}
-                >
+                <a href={form.url} target="_blank" rel="noreferrer" className={styles.ctaButton}>
                   Participer
                 </a>
               </div>
@@ -70,7 +65,7 @@ function App() {
         ))}
       </div>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
