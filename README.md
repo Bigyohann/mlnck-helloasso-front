@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# Frontend HelloAsso pour WordPress
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Ce projet est une interface React moderne, construite avec Vite et TypeScript, permettant d'afficher une grille de formulaires HelloAsso. Il est spécifiquement conçu pour être packagé et utilisé comme une extension WordPress.
 
-Currently, two official plugins are available:
+## Objectifs du projet
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Récupérer les formulaires HelloAsso via une API dédiée.
+- Afficher les formulaires sous forme de cartes dans une grille responsive.
+- Permettre une intégration facile dans WordPress.
+- Utiliser un proxy pour l'affichage des images (bannières) afin d'éviter les problèmes de CORS.
 
-## React Compiler
+## Dépôts associés
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Backend** : [mlnck-helloasso](https://github.com/Bigyohann/mlnck-helloasso) - L'API en Go qui gère la communication avec HelloAsso et le proxy d'images.
 
-## Expanding the ESLint configuration
+## Technologies utilisées
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19** : Bibliothèque pour l'interface utilisateur.
+- **TypeScript** : Pour un typage statique et une meilleure maintenabilité.
+- **Vite** : Outil de build ultra-rapide.
+- **CSS Modules** : Pour une gestion isolée des styles.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Configuration
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+Le projet utilise des variables d'environnement pour la configuration. Créez un fichier `.env` (ou utilisez `.env.development` / `.env.production`) avec :
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_API_URL=https://votre-api-helloasso.com
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Développement
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Pour lancer le serveur de développement :
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+pnpm install
+pnpm dev
 ```
+
+## Déploiement WordPress
+
+Le projet inclut un script spécifique pour générer l'extension WordPress :
+
+```bash
+pnpm run build:wp
+```
+
+Cette commande effectue les étapes suivantes :
+
+1. Compile le projet React.
+2. Copie les fichiers générés dans le dossier `wp-plugin/mlnck-helloasso-plugin/dist`.
+3. Compresse le dossier de l'extension dans un fichier `.zip` prêt à être installé sur WordPress.
+
+L'extension WordPress se trouve ensuite dans le dossier `wp-plugin/`.
