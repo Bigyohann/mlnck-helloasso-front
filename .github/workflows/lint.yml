@@ -2,14 +2,17 @@ name: Lint & Style
 
 on:
   push:
-    branches: [ '**' ]
+    branches: ['**']
   pull_request:
-    branches: [ '**' ]
+    branches: ['**']
 
 jobs:
   php-format:
     name: PHP Format Check (Mago)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: wp-plugin/mlnck-helloasso-plugin
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -30,6 +33,9 @@ jobs:
     name: PHP Lint (Mago)
     runs-on: ubuntu-latest
     needs: php-format
+    defaults:
+      run:
+        working-directory: wp-plugin/mlnck-helloasso-plugin
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,8 +61,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -93,8 +97,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 9
 
       - name: Setup Node.js
         uses: actions/setup-node@v4

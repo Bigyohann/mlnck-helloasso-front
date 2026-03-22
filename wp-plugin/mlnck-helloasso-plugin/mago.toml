@@ -4,15 +4,16 @@ php-version = "8.1.0"
 
 [source]
 workspace = "."
-paths = ["mlnck-helloasso.php"]
-includes = []
-excludes = ["vendor"]
+paths = ["mlnck-helloasso.php", "src", "mago-stubs.php"]
+includes = ["vendor"]
+excludes = []
 
 [formatter]
 preset = "pint"
 
 [linter]
 integrations = ["symfony"]
+excludes = ["mago-stubs.php"]
 
 [linter.rules]
 ambiguous-function-call = { enabled = false }
