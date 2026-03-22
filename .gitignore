@@ -10,6 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+wp-plugin/mlnck-helloasso-plugin/vendor
 *.local
 wp-plugin/*.zip
 

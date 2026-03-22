@@ -1,0 +1,15 @@
+{
+    "name": "bigyohann/mlnck-helloasso-plugin",
+    "description": "WordPress plugin to load MLNCK HelloAsso React frontend",
+    "type": "wordpress-plugin",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "php": ">=7.4",
+        "yahnis-elsts/plugin-update-checker": "^5.0"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
+    }
+}

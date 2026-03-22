@@ -39,6 +39,10 @@ jobs:
           sed -i "s/Version: .*/Version: ${{ steps.get_version.outputs.CLEAN_VERSION }}/" wp-plugin/mlnck-helloasso-plugin/mlnck-helloasso.php
           sed -i "s/define('MLNCK_HELLOASSO_VERSION', '.*')/define('MLNCK_HELLOASSO_VERSION', '${{ steps.get_version.outputs.CLEAN_VERSION }}')/" wp-plugin/mlnck-helloasso-plugin/mlnck-helloasso.php
 
+      - name: Install Composer Dependencies
+        working-directory: wp-plugin/mlnck-helloasso-plugin
+        run: composer install --no-dev --optimize-autoloader
+
       - name: Install dependencies
         run: pnpm install
 

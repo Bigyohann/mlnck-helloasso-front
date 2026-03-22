@@ -10,7 +10,10 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once plugin_dir_path(__FILE__) . 'vendor/plugin-update-checker-5.6/plugin-update-checker.php';
+if (file_exists(plugin_dir_path(__FILE__) . 'vendor/autoload.php')) {
+    require_once plugin_dir_path(__FILE__) . 'vendor/autoload.php';
+}
+
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 $myUpdateChecker = PucFactory::buildUpdateChecker(
