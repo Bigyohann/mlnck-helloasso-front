@@ -1,13 +1,14 @@
 {
   "name": "mlnck_front_helloasso",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "build:wp": "npm run build && rm -rf wp-plugin/mlnck-helloasso-plugin/dist && cp -r dist wp-plugin/mlnck-helloasso-plugin/dist && (cd wp-plugin && rm -f mlnck-helloasso-plugin*.zip && zip -r mlnck-helloasso-plugin-${PLUGIN_VERSION:-$npm_package_version}.zip mlnck-helloasso-plugin)"
   },
   "dependencies": {
     "react": "^19.2.0",
@@ -29,5 +30,6 @@
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.2.5"
-  }
+  },
+  "packageManager": "pnpm@10.20.0+sha512.cf9998222162dd85864d0a8102e7892e7ba4ceadebbf5a31f9c2fce48dfce317a9c53b9f6464d1ef9042cba2e02ae02a9f7c143a2b438cd93c91840f0192b9dd"
 }

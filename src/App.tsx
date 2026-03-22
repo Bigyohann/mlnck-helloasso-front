@@ -1,35 +1,76 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import styles from "./App.module.css";
+
+interface HelloassoForm {
+  banner: {
+    fileName: string;
+    publicUrl: string;
+  };
+  currency: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  meta: {
+    createdAt: string;
+    updatedAt: string;
+  };
+  title: string;
+  formSlug: string;
+  url: string;
+}
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [forms, setForms] = useState<HelloassoForm[]>([]);
+
+  useEffect(() => {
+    const fetchDatas = async () => {
+      try {
+        const apiUrl = import.meta.env.VITE_API_URL;
+        const response = await fetch(`${apiUrl}/forms`);
+        const data = await response.json();
+        setForms(data);
+      } catch (error) {
+        console.error("Error fetching forms:", error);
+      }
+    };
+
+    fetchDatas();
+  }, []);
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className={styles.cardGrid}>
+        {forms.map((form) => (
+          <div key={form.formSlug} className={styles.formCard}>
+            {form.banner?.publicUrl && (
+              <img
+                src={`${import.meta.env.VITE_API_URL}/proxy-image?url=${encodeURIComponent(
+                  form.banner.publicUrl
+                )}`}
+                alt={form.title}
+                className={styles.formBanner}
+              />
+            )}
+            <div className={styles.formContent}>
+              <h2>{form.title}</h2>
+              <p>{form.description}</p>
+              <div className={styles.formFooter}>
+                <span>{new Date(form.startDate).toLocaleDateString()}</span>
+                <a
+                  href={form.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className={styles.ctaButton}
+                >
+                  Participer
+                </a>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

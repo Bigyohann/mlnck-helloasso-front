@@ -1,0 +1,53 @@
+name: Build and Release Plugin
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build and Upload Artifact
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          # Use github.ref_name for the tag name (e.g., v1.0.1 or 1.0.1)
+          VERSION=${{ github.ref_name }}
+          # Strip 'v' prefix if it exists for semver internal versioning
+          CLEAN_VERSION=$(echo $VERSION | sed 's/^v//')
+          echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
+          echo "CLEAN_VERSION=$CLEAN_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Update Plugin Version
+        run: |
+          # Sync plugin header and constant with the tag version
+          sed -i "s/Version: .*/Version: ${{ steps.get_version.outputs.CLEAN_VERSION }}/" wp-plugin/mlnck-helloasso-plugin/mlnck-helloasso.php
+          sed -i "s/define('MLNCK_HELLOASSO_VERSION', '.*')/define('MLNCK_HELLOASSO_VERSION', '${{ steps.get_version.outputs.CLEAN_VERSION }}')/" wp-plugin/mlnck-helloasso-plugin/mlnck-helloasso.php
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Plugin ZIP
+        run: PLUGIN_VERSION=${{ steps.get_version.outputs.VERSION }} pnpm run build:wp
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: wp-plugin/mlnck-helloasso-plugin-${{ steps.get_version.outputs.VERSION }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
