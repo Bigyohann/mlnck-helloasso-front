@@ -1,0 +1,117 @@
+name: Lint & Style
+
+on:
+  push:
+    branches: [ '**' ]
+  pull_request:
+    branches: [ '**' ]
+
+jobs:
+  php-format:
+    name: PHP Format Check (Mago)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --dev
+
+      - name: Mago Format Check
+        run: ./vendor/bin/mago format --check
+
+  php-lint:
+    name: PHP Lint (Mago)
+    runs-on: ubuntu-latest
+    needs: php-format
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: composer install --no-interaction --prefer-dist --dev
+
+      - name: Mago Lint
+        run: ./vendor/bin/mago lint
+
+  typescript-format:
+    name: TypeScript Format Check (Prettier)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          if [ -f pnpm-lock.yaml ] || [ -f package.json ]; then
+            pnpm install
+          fi
+
+      - name: Run Prettier Check
+        run: |
+          if [ -f package.json ]; then
+            # Try to run prettier if it's in scripts, otherwise use npx
+            if grep -q "format:check" package.json; then
+              pnpm run format:check
+            else
+              pnpx prettier --check .
+            fi
+          else
+            echo "No package.json found, skipping Prettier check."
+          fi
+
+  typescript-lint:
+    name: TypeScript Lint
+    runs-on: ubuntu-latest
+    needs: typescript-format
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: |
+          if [ -f pnpm-lock.yaml ] || [ -f package.json ]; then
+            pnpm install
+          fi
+
+      - name: Run Lint
+        run: |
+          if [ -f package.json ]; then
+            pnpm run lint
+          else
+            echo "No package.json found, skipping TypeScript lint."
+          fi
